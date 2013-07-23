@@ -1,0 +1,12 @@
+{
+  "name": "swipe-pane",
+  "description": "Swipable component with touch support",
+  "version": "0.0.1",
+  "dependencies": {
+    "component/emitter": "1.0.0",
+    "component/events": "1.0.2",
+    "component/translate": "*"
+  },
+  "development": {},
+  "scripts": ["index.js"]
+}
