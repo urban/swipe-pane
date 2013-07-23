@@ -24,10 +24,19 @@
       }
 
       #container > div {
-        background: #f8f8f8 url(http://www.deargrumpycat.com/wp-content/uploads/2013/04/Grumpy-Cat.jpg) no-repeat 0 0;
+        background: #f8f8f8 url(http://www.deargrumpycat.com/wp-content/uploads/2013/04/Grumpy-Cat.jpg) repeat 0 0;
+        background-size: contain;
         height: 768px;
         width: 1024px;
         -webkit-user-select: none;
+      }
+
+      #container.landscape > div {
+        height: 400px;
+      }
+
+      #container.portrait > div {
+        width: 400px;
       }
     </style>
   </head>
@@ -36,11 +45,21 @@
       <div></div>
     </div>
 
+    <button onclick="resize('square')">Square</button>
+    <button onclick="resize('portrait')">Portrait</button>
+    <button onclick="resize('landscape')">Landscape</button>
+
     <script src="build/build.js"></script>
     <script>
       var SwipePane = require('swipe-pane');
       var el = document.querySelector('#container');
       var pane = SwipePane(el);
+
+      function resize(name) {
+        el.className = name;
+        pane.transitionDuration(0);
+        pane.translate(0, 0);
+      }
       
     </script>
   </body>

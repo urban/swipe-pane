@@ -26,7 +26,7 @@ function SwipePane(el) {
   if (!(this instanceof SwipePane)) return new SwipePane(el);
   if (!el) throw new TypError('SwipePane requires an element');
   this.el = el;
-  this.child = this.el.children[0];
+  this.content = this.el.children[0];
   this.duration(300);
   this.bind();
 };
@@ -44,7 +44,7 @@ Emitter(SwipePane.prototype);
  */
 
 SwipePane.prototype.bind = function () {
-  this.events = events(this.child, this);
+  this.events = events(this.content, this);
   this.events.bind('mousedown', 'ontouchstart');
   this.events.bind('mousemove', 'ontouchmove');
   this.events.bind('touchstart');
@@ -78,6 +78,17 @@ SwipePane.prototype.ontouchstart = function (e) {
 
   this.transitionDuration(0);
 
+  var bounds = this.el.getBoundingClientRect();
+  var contentBounds = this.content.getBoundingClientRect();
+
+  this.contentX = contentBounds.left - bounds.left;
+  this.contentY = contentBounds.top - bounds.top;
+
+  this.difX = bounds.width - contentBounds.width;
+  this.difY = bounds.height - contentBounds.height;
+  
+  console.log('this.difX', this.difX);
+
   this.swipe = {
     x: e.pageX,
     y: e.pageY,
@@ -85,15 +96,6 @@ SwipePane.prototype.ontouchstart = function (e) {
     dy: 0,
     at: new Date
   };
-
-  var bounds = this.el.getBoundingClientRect();
-  var childBounds = this.child.getBoundingClientRect();
-
-  this.childX = childBounds.left - bounds.left;
-  this.childY = childBounds.top - bounds.top;
-
-  this.difX = bounds.width - childBounds.width;
-  this.difY = bounds.height - childBounds.height;
 
   this.emit('start', { x: this.swipe.x, y: this.swipe.y });
 };
@@ -122,14 +124,23 @@ SwipePane.prototype.ontouchmove = function (e) {
   s.dx = x - s.x;
   s.dy = y - s.y;
 
+    // lock x
+  if (this.difX == 0) {
+    s.dx = 0;
+  }
+  // lock y
+  if (this.difY == 0) {
+    s.dy = 0;
+  }
+
   // when we overwrite touch event with e.touches[0], it doesn't
   // have the preventDefault method. e.preventDefault() prevents
   // multiaxis scrolling when moving from left to right
   (ev || e).preventDefault();
 
   // position
-  var px = s.dx + this.childX;
-  var py = s.dy + this.childY;
+  var px = s.dx + this.contentX;
+  var py = s.dy + this.contentY;
 
   // resistance left
   if (px > 0) {
@@ -148,7 +159,7 @@ SwipePane.prototype.ontouchmove = function (e) {
     py += (this.difY - py) * 0.5;
   }
 
-  translate(this.child, px, py);
+  this.translate(px, py);
 
   this.emit('swipe', { x: px, y: py });
 };
@@ -168,19 +179,32 @@ SwipePane.prototype.ontouchend = function (e) {
 
   // setup
   var s = this.swipe;
-  var px = s.dx + this.childX;
-  var py = s.dy + this.childY;
+  var px = s.dx + this.contentX;
+  var py = s.dy + this.contentY;
 
   px = min(0, max(px, this.difX));
   py = min(0, max(py, this.difY));
 
   this.transitionDuration(this._duration);
-  translate(this.child, px, py);
+  this.translate(px, py);
 
   // clear
   this.swipe = null;
 
   this.emit('end', { x: px, y: py });
+};
+
+/**
+ * Set transition duration to `ms`.
+ *
+ * @param {Number} ms
+ * @return {SwipePane} self
+ * @api public
+ */
+
+SwipePane.prototype.duration = function (ms) {
+  this._duration = ms;
+  return this;
 };
 
 /**
@@ -203,10 +227,20 @@ SwipePane.prototype.duration = function (ms) {
  */
 
 SwipePane.prototype.transitionDuration = function (ms) {
-  var s = this.child.style;
+  var s = this.content.style;
   s.webkitTransition = ms + 'ms -webkit-transform';
   s.MozTransition = ms + 'ms -moz-transform';
   s.msTransition = ms + 'ms -ms-transform';
   s.OTransition = ms + 'ms -o-transform';
   s.transition = ms + 'ms transform';
+};
+
+/**
+ * Translate to `x` and `y`.
+ *
+ * @api private
+ */
+
+SwipePane.prototype.translate = function (x, y) {
+  translate(this.content, x, y);
 };
