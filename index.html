@@ -1,1 +1,47 @@
-My GitHub Page
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+    <style>
+
+      * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      body {
+        font: 14px "Helvetica Neue", Helvetica, Arial;
+        padding: 5px;
+      }
+
+      #container {
+        background: #666;
+        border: 1px solid #000;
+        height: 400px;
+        overflow: hidden;
+        width: 400px;
+      }
+
+      #container > div {
+        background: #f8f8f8 url(http://www.deargrumpycat.com/wp-content/uploads/2013/04/Grumpy-Cat.jpg) no-repeat 0 0;
+        height: 768px;
+        width: 1024px;
+        -webkit-user-select: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div></div>
+    </div>
+
+    <script src="build/build.js"></script>
+    <script>
+      var SwipePane = require('swipe-pane');
+      var el = document.querySelector('#container');
+      var pane = SwipePane(el);
+      
+    </script>
+  </body>
+</html>
