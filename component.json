@@ -1,12 +1,15 @@
 {
   "name": "swipe-pane",
+  "repo": "urban/swipe-pane",
   "description": "Swipe pane component with touch support",
   "version": "1.0.1",
+  "keywords": ["swipe", "touch", "ui"],
   "dependencies": {
     "component/emitter": "1.0.0",
     "component/events": "1.0.2",
     "component/translate": "*"
   },
   "development": {},
-  "scripts": ["index.js"]
+  "scripts": ["index.js"],
+  "license": "MIT"
 }
