@@ -46,11 +46,11 @@ Emitter(SwipePane.prototype);
 SwipePane.prototype.bind = function () {
   this.events = events(this.content, this);
   this.events.bind('mousedown', 'ontouchstart');
-  this.events.bind('mousemove', 'ontouchmove');
   this.events.bind('touchstart');
   this.events.bind('touchmove');
 
   this.docEvents = events(document, this);
+  this.docEvents.bind('mousemove', 'ontouchmove');
   this.docEvents.bind('mouseup', 'ontouchend');
   this.docEvents.bind('touchend');
 };
