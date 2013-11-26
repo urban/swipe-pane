@@ -84,10 +84,14 @@ SwipePane.prototype.ontouchstart = function (e) {
   this.contentX = contentBounds.left - bounds.left;
   this.contentY = contentBounds.top - bounds.top;
 
-  this.difX = bounds.width - contentBounds.width;
-  this.difY = bounds.height - contentBounds.height;
-  
-  console.log('this.difX', this.difX);
+  // this.difX = bounds.width - contentBounds.width;
+  // this.difY = bounds.height - contentBounds.height;
+  var w = window.getComputedStyle(this.el).getPropertyValue('width');
+  var h = window.getComputedStyle(this.el).getPropertyValue('height');
+  var cW = window.getComputedStyle(this.content).getPropertyValue('width');
+  var cH = window.getComputedStyle(this.content).getPropertyValue('height');
+  this.difX = parseFloat(w) - parseFloat(cW);
+  this.difY = parseFloat(h) - parseFloat(cH);
 
   this.swipe = {
     x: e.pageX,

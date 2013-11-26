@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+    <style>
+
+/*      * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }*/
+
+      body {
+        font: 14px "Helvetica Neue", Helvetica, Arial;
+        padding: 5px;
+      }
+
+      #container {
+        background: #666;
+        border: 1px solid #000;
+        height: 380px;
+        overflow: hidden;
+        width: 295px;
+      }
+
+      #container > div {
+        width: 100%;
+        -webkit-user-select: none;
+      }
+
+      #container > div > div {
+        background: white;
+        border-top: 1px solid gray;
+        height: 50px;
+        line-height: 50px;
+        text-indent: 15px;
+        width: 100%;
+      }
+      #container > div > div:first-child {
+        border-top: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="wrapper"></div>
+    </div>
+
+    <button onclick="resize('square')">Add Row</button>
+    <button onclick="resize('portrait')">Remove Row</button>
+
+    <script src="../build/build.js"></script>
+    <script>
+      var domify = require('domify');
+      var SwipePane = require('swipe-pane');
+      var el = document.querySelector('#container');
+      var wrapper = el.querySelector('.wrapper');
+      var pane = SwipePane(el);
+      
+      for (var i=0; i<10; i++) {
+        wrapper.appendChild(domify('<div class="row">Row ' + i + '</div>'));
+      };
+      
+    </script>
+  </body>
+</html>
