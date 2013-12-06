@@ -29,6 +29,7 @@ function SwipePane(el) {
   this.content = this.el.children[0];
   this.duration(300);
   this.bind();
+  this.position = { x: 0, y: 0 };
 };
 
 /**
@@ -165,6 +166,9 @@ SwipePane.prototype.ontouchmove = function (e) {
 
   this.translate(px, py);
 
+  // update position
+  this.position = { x: px, y: py };
+
   this.emit('swipe', { x: px, y: py });
 };
 
@@ -195,6 +199,9 @@ SwipePane.prototype.ontouchend = function (e) {
   // clear
   this.swipe = null;
 
+  // store position
+  this.position = { x: px, y: py };
+
   this.emit('end', { x: px, y: py });
 };
 
@@ -222,6 +229,16 @@ SwipePane.prototype.duration = function (ms) {
 SwipePane.prototype.duration = function (ms) {
   this._duration = ms;
   return this;
+};
+
+/**
+ * Force redraw.
+ *
+ * @api public
+ */
+
+SwipePane.prototype.redraw = function () {
+  translate(this.content, this.position.x, this.position.y);
 };
 
 /**
